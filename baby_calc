@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+require 'bundler/inline'
+
+gemfile do
+  source 'https://rubygems.org'
+  gem 'highline'
+end
+
+def terminal
+  @term ||= HighLine.new
+end
+
+def ask(*args, &block)
+  terminal.ask(*args, &block)
+end
+
+def say(msg, log_style=:normal)
+  terminal.say msg
+end
+
+
+bottles = ask("How many bottles do you want to make?\n", Integer)
+size = ask("How many ounces do you want each bottle to be?\n", Float)
+
+
+formula = ((8.7 * 1.5) / 2.3)
+water = (60 / 2.3)
+
+total_volume = bottles * size
+total_formula = formula * total_volume
+total_water = water * total_volume
+
+
+say "For #{bottles} x #{size}oz bottles you need:"
+say "- #{total_water.round(1)}g water"
+say "- #{total_formula.round(1)}g formula"
+say "\nEach bottle should weigh #{((total_water + total_formula) / bottles).round(1)}g"
